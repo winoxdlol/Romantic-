@@ -190,10 +190,10 @@ const CONFIG = {
   spotifyUrl: "https://open.spotify.com/track/50x1Ic8CaXkYNvjmxe3WXy?si=xlTWl6dZQJqaiwlKMdohPQ",
   letter: "Love, you are the best thing that ever happened to me in my life and you will always be. No matter the hardships I go through, I would never give up on us. Every moment with you is a treasure, and my heart knows that you're my forever.",
   memories: [
-    { type: "image", src: "images/photo1.jpg", caption: "Your beautiful soul" },
-    { type: "image", src: "images/photo2.jpg", caption: "Golden moments" },
-    { type: "image", src: "images/photo3.jpg", caption: "Timeless beauty" },
-    { type: "image", src: "images/photo4.jpg", caption: "Paradise with you" },
+    { type: "image", src: "images1.jpg", caption: "Your beautiful soul" },
+    { type: "image", src: "images2.jpg", caption: "Golden moments" },
+    { type: "image", src: "images3.jpg", caption: "Timeless beauty" },
+    { type: "image", src: "images4.jpg", caption: "Paradise with you" },
   ],
 };
 
@@ -290,6 +290,18 @@ const noBtn = document.getElementById("noBtn"), yesBtn = document.getElementById
       box = document.getElementById("proposalBox"), afterYes = document.getElementById("afterYes");
 const noTexts = ["No","Are you sure?","Really sure?","Think again 🥺","Last chance!","Okay, fine — Yes 💍"];
 let dodges = 0;
+function placeNoInitial(){
+  const yesRect = yesBtn.getBoundingClientRect();
+  const boxRect = box.getBoundingClientRect();
+  const gap = 20;
+  const maxX = Math.max(box.clientWidth - noBtn.offsetWidth - 5, 0);
+  const maxY = Math.max(box.clientHeight - noBtn.offsetHeight - 5, 0);
+  let left = yesRect.left - boxRect.left + (yesRect.width - noBtn.offsetWidth) / 2;
+  let top  = yesRect.bottom - boxRect.top + gap;
+  noBtn.style.left = Math.min(Math.max(left, 0), maxX) + "px";
+  noBtn.style.top  = Math.min(Math.max(top, 0), maxY) + "px";
+}
+window.addEventListener("load", placeNoInitial);
 function dodge(){
   dodges++;
   noBtn.textContent = noTexts[Math.min(dodges, noTexts.length - 1)];
