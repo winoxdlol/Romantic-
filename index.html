@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>For You 💛</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --plum:#2B1E2F; --rose:#6F3D55; --peach:#D98C73;
+    --champagne:#F7D9B8; --ivory:#FFF7EF; --gold:#E9B949;
+    --mint:#00D9A3; --mint-light:#4FFFCC; --mint-dark:#00B88D;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'DM Sans',system-ui,sans-serif; color:var(--ivory);
+    background:linear-gradient(160deg,#1a4d40 0%,#0d7a77 40%,#00b393 100%);
+    min-height:100vh; overflow-x:hidden; perspective:1000px;
+  }
+  #hearts{position:fixed;inset:0;z-index:0;pointer-events:none}
+  .orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.25;z-index:0;pointer-events:none}
+  .orb.a{width:420px;height:420px;background:var(--mint);top:-120px;left:-120px;animation:float 12s ease-in-out infinite}
+  .orb.b{width:360px;height:360px;background:var(--peach);bottom:-100px;right:-100px;animation:float 14s ease-in-out infinite reverse}
+  .orb.c{width:280px;height:280px;background:var(--mint-light);top:50%;left:5%;animation:float 15s ease-in-out infinite;opacity:.15}
+  @keyframes float{50%{transform:translate(40px,30px) scale(1.08)}}
+  main,header{position:relative;z-index:1}
+
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:2rem;gap:2rem;perspective:1200px}
+  .eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:.75rem;color:var(--mint-light);opacity:.9;
+    animation:fadeInDown .8s ease forwards;text-shadow:0 4px 20px rgba(0,217,163,.3);font-weight:600}
+  h1{font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:clamp(2.4rem,6vw,4.4rem);
+    line-height:1.4;max-width:22ch;animation:fadeInUp .9s ease .2s forwards;opacity:0;
+    background:linear-gradient(135deg,var(--gold),var(--mint-light),var(--peach));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 8px 16px rgba(0,217,163,.4));text-shadow:0 8px 32px rgba(0,217,163,.4)}
+  h1 em{font-style:italic;color:var(--mint-light)}
+  h2{font-family:'Playfair Display',serif;font-weight:600;font-size:clamp(2rem,4.5vw,3.2rem);color:var(--champagne);
+    word-spacing:.15em;line-height:1.5;letter-spacing:-.5px}
+  .btn{font-family:inherit;font-size:1rem;cursor:pointer;border:none;border-radius:999px;
+    padding:1.1rem 2.4rem;color:#0a3d35;background:linear-gradient(120deg,var(--gold),var(--mint-light));
+    box-shadow:0 12px 40px rgba(0,217,163,.5);transition:transform .25s,box-shadow .25s,scale .25s;
+    backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);font-weight:600}
+  .btn:hover{transform:translateY(-4px) scale(1.08);box-shadow:0 18px 60px rgba(0,217,163,.7)}
+  .btn:active{scale:.93}
+  .btn.ghost{background:rgba(0,217,163,.1);color:var(--mint-light);border:2px solid var(--mint-light);box-shadow:0 6px 20px rgba(0,217,163,.3)}
+  .btn.ghost:hover{background:rgba(0,217,163,.2);box-shadow:0 12px 35px rgba(0,217,163,.5)}
+  .btn.no{background:rgba(255,247,239,.12);color:var(--ivory);border:2px solid rgba(247,217,184,.5);box-shadow:none;
+    position:absolute}
+
+  .section{max-width:900px;margin:0 auto;padding:8rem 2rem;text-align:center}
+  .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+  .reveal.visible{opacity:1;transform:none}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.5rem;margin-top:4rem}
+  .memory{border-radius:24px;overflow:hidden;
+    background:rgba(0,217,163,.08);border:2px solid rgba(0,217,163,.3);cursor:pointer;
+    transition:transform .35s cubic-bezier(.34,.1,.64,.88),box-shadow .35s,border-color .35s;
+    backdrop-filter:blur(12px);position:relative}
+  .memory::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.25),transparent);
+    opacity:0;transition:opacity .4s;pointer-events:none}
+  .memory:hover{transform:translateY(-14px) scale(1.05) rotateX(5deg);
+    box-shadow:0 28px 70px rgba(0,217,163,.6);border-color:var(--mint-light)}
+  .memory:hover::before{opacity:1}
+  .memory img,.memory video{width:100%;height:260px;object-fit:cover;display:block;transition:transform .6s}
+  .memory:hover img,.memory:hover video{transform:scale(1.12) rotateY(-2deg)}
+  .memory figcaption{padding:1rem;font-size:.95rem;color:var(--champagne);font-family:'Cormorant Garamond',serif;
+    background:rgba(0,217,163,.12);backdrop-filter:blur(10px);border-top:1.5px solid rgba(0,217,163,.25)}
+  .fallback{width:100%;height:260px;display:flex;align-items:center;justify-content:center;
+    font-size:2.8rem;background:linear-gradient(135deg,var(--rose),var(--mint))}
+
+  #lightbox{position:fixed;inset:0;z-index:50;background:rgba(10,30,25,.97);display:none;
+    align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(12px);animation:fadeIn .4s}
+  #lightbox.open{display:flex}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  #lightbox img,#lightbox video{max-width:92vw;max-height:82vh;border-radius:24px;
+    box-shadow:0 40px 100px rgba(0,217,163,.6);animation:zoomIn .5s cubic-bezier(.34,.1,.64,.88)}
+  @keyframes zoomIn{from{transform:scale(.7) rotateX(12deg);opacity:0}to{transform:scale(1) rotateX(0);opacity:1}}
+  #lightbox p{position:absolute;bottom:2.8rem;color:var(--champagne);font-family:'Cormorant Garamond',serif;font-size:1.1rem;
+    text-shadow:0 4px 12px rgba(0,0,0,.6)}
+
+  .letter{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,2.8vw,1.8rem);
+    line-height:2.4;max-width:42ch;margin:3rem auto;color:var(--ivory);padding:2.5rem;text-align:center;
+    background:rgba(0,217,163,.1);border-radius:24px;border:2px solid rgba(0,217,163,.3);
+    backdrop-filter:blur(18px);box-shadow:inset 0 0 40px rgba(0,217,163,.12),-0 10px 40px rgba(0,217,163,.25);
+    word-spacing:.12em;letter-spacing:.3px}
+  .signature{margin-top:2.4rem;color:var(--mint-light);font-style:italic;font-size:1.3rem;font-family:'Playfair Display',serif;
+    text-shadow:0 4px 16px rgba(0,217,163,.4);font-weight:600}
+
+  .song-card{margin:4rem auto;max-width:580px;padding:3rem;border-radius:32px;
+    background:linear-gradient(135deg,rgba(0,217,163,.15),rgba(233,185,73,.1));
+    border:2px solid rgba(0,217,163,.35);backdrop-filter:blur(24px);
+    box-shadow:0 12px 50px rgba(0,217,163,.35),inset 0 0 30px rgba(255,255,255,.08);
+    animation:slideUp .8s ease forwards}
+  .song-card h2{font-size:1.8rem;margin-bottom:1.6rem;line-height:1.4}
+  .song-card .btn{margin-top:2rem;display:block;width:auto}
+  @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+
+  .proposal-box{position:relative;min-height:160px;margin:3rem auto;max-width:680px;
+    display:flex;gap:2rem;justify-content:center;align-items:center;flex-wrap:wrap}
+  #afterYes{display:none;margin-top:3rem;font-family:'Playfair Display',serif;
+    font-size:clamp(1.8rem,4vw,2.8rem);color:var(--mint-light);font-style:italic;
+    animation:heartBeat .8s cubic-bezier(.68,.55,.265,1.55);text-shadow:0 6px 24px rgba(0,217,163,.5);
+    letter-spacing:.5px}
+  @keyframes heartBeat{0%{scale:1}25%{scale:1.4}50%{scale:1}}
+  footer{text-align:center;padding:4rem 2rem;color:var(--champagne);opacity:.8;font-size:.9rem;
+    border-top:1px solid rgba(0,217,163,.2)}
+  .confetti{position:fixed;top:-50px;z-index:60;pointer-events:none;animation:fall linear forwards;
+    filter:drop-shadow(0 2px 6px rgba(0,0,0,.4));font-size:1.8rem}
+  @keyframes fall{to{transform:translateY(120vh) rotate(720deg);opacity:.1}}
+
+  .touch-heart{position:fixed;z-index:55;font-size:2.5rem;pointer-events:none;
+    animation:floatUp 1.2s cubic-bezier(.25,.46,.45,.94) forwards;text-shadow:0 2px 8px rgba(0,0,0,.3)}
+  @keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-80px) scale(1.4)}}
+
+  .mouse-follow{position:fixed;width:500px;height:500px;border-radius:50%;pointer-events:none;z-index:1;opacity:.08;
+    background:radial-gradient(circle,var(--mint-light),transparent);filter:blur(50px);display:none}
+
+  @media (max-width:768px){
+    .proposal-box{gap:1.5rem;min-height:auto}
+    .memory{height:220px}
+    .letter{font-size:1.1rem;padding:1.8rem}
+    .song-card{padding:2rem;margin:2.5rem auto}
+    .section{padding:5rem 1.5rem}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+
+  @keyframes fadeInDown{from{opacity:0;transform:translateY(-25px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<canvas id="hearts"></canvas>
+<div class="mouse-follow" id="mouseFollow"></div>
+<div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+
+<header class="hero" id="hero">
+  <p class="eyebrow">a little corner of the internet, just for you</p>
+  <h1 id="heroTitle">For the girl who makes <em>every moment</em> feel magical</h1>
+  <button class="btn" id="beginBtn">Begin our story ✨</button>
+</header>
+
+<main>
+  <section class="section reveal" id="gallery-section">
+    <p class="eyebrow">chapter one</p>
+    <h2>Little pieces of us</h2>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <section class="section reveal" id="letter-section">
+    <p class="eyebrow">chapter two</p>
+    <h2>A letter, from my heart to yours</h2>
+    <p class="letter" id="letter"></p>
+    <p class="signature" id="signature"></p>
+  </section>
+
+  <section class="section reveal" id="song-section">
+    <p class="eyebrow">chapter three</p>
+    <h2>There's a song that plays in my head…</h2>
+    <div class="song-card">
+      <h2>…every time I think of you</h2>
+      <p style="color:var(--champagne);margin-bottom:1.5rem;font-size:1.05rem">Tap below to discover</p>
+      <a class="btn" id="spotifyBtn" target="_blank" rel="noopener">🎵 Click to hear which song you are</a>
+    </div>
+  </section>
+
+  <section class="section reveal" id="proposal-section">
+    <p class="eyebrow">one last thing…</p>
+    <h2>I have one question for you</h2>
+    <h2 style="font-size:clamp(2.2rem,5.5vw,3.4rem);color:var(--mint-light);font-family:'Playfair Display',serif;font-style:italic;margin-top:1.5rem;margin-bottom:2rem;line-height:1.3">Will you marry me?</h2>
+    <div class="proposal-box" id="proposalBox">
+      <button class="btn" id="yesBtn">Yes, a thousand times 💍</button>
+      <button class="btn no" id="noBtn">No</button>
+    </div>
+    <p id="afterYes">You just made me the happiest person alive 💛</p>
+  </section>
+</main>
+
+<div id="lightbox"><img id="lbImg"><video id="lbVid" controls></video><p id="lbCap"></p></div>
+<footer>made with love, for you — <span id="footerName"></span></footer>
+
+<script>
+/* ✏️ EDIT EVERYTHING PERSONAL HERE */
+const CONFIG = {
+  herName: "My love",
+  yourName: "Vinny",
+  spotifyUrl: "https://open.spotify.com/track/50x1Ic8CaXkYNvjmxe3WXy?si=xlTWl6dZQJqaiwlKMdohPQ",
+  letter: "Love, you are the best thing that ever happened to me in my life and you will always be. No matter the hardships I go through, I would never give up on us. Every moment with you is a treasure, and my heart knows that you're my forever.",
+  memories: [
+    { type: "image", src: "images/photo1.jpg", caption: "Your beautiful soul" },
+    { type: "image", src: "images/photo2.jpg", caption: "Golden moments" },
+    { type: "image", src: "images/photo3.jpg", caption: "Timeless beauty" },
+    { type: "image", src: "images/photo4.jpg", caption: "Paradise with you" },
+  ],
+};
+
+document.title = `For ${CONFIG.herName} 💛`;
+document.getElementById("spotifyBtn").href = CONFIG.spotifyUrl;
+document.getElementById("signature").textContent = `— ${CONFIG.yourName}`;
+document.getElementById("footerName").textContent = CONFIG.herName;
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// TOUCH HEART ANIMATION - clicks anywhere create floating hearts
+const hearts_emojis = ["💚","💛","💜","❤️","💕"];
+document.addEventListener("click", e => {
+  const heart = document.createElement("div");
+  heart.className = "touch-heart";
+  heart.textContent = hearts_emojis[Math.floor(Math.random() * hearts_emojis.length)];
+  heart.style.left = e.clientX + "px";
+  heart.style.top = e.clientY + "px";
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 1200);
+});
+
+// Mouse follow effect
+const mouseFollow = document.getElementById("mouseFollow");
+if(!reduced){
+  mouseFollow.style.display = "block";
+  document.addEventListener("mousemove", e => {
+    mouseFollow.style.left = (e.clientX - 250) + "px";
+    mouseFollow.style.top = (e.clientY - 250) + "px";
+  });
+}
+
+// Gallery
+const gallery = document.getElementById("gallery");
+CONFIG.memories.forEach((m, i) => {
+  const fig = document.createElement("figure");
+  fig.className = "memory";
+  fig.style.animationDelay = (i * 0.1) + "s";
+  if (m.type === "video") {
+    fig.innerHTML = `<video src="${m.src}" muted playsinline preload="metadata"></video><figcaption>${m.caption}</figcaption>`;
+  } else {
+    fig.innerHTML = `<img src="${m.src}" alt="${m.caption}" loading="lazy"
+      onerror="this.outerHTML='<div class=fallback>💚</div>'"><figcaption>${m.caption}</figcaption>`;
+  }
+  fig.addEventListener("click", () => openLightbox(m));
+  gallery.appendChild(fig);
+});
+
+// Lightbox
+const lb = document.getElementById("lightbox"), lbImg = document.getElementById("lbImg"),
+      lbVid = document.getElementById("lbVid"), lbCap = document.getElementById("lbCap");
+function openLightbox(m){
+  lb.classList.add("open");
+  lbImg.style.display = m.type === "image" ? "block" : "none";
+  lbVid.style.display = m.type === "video" ? "block" : "none";
+  if (m.type === "image") { lbImg.src = m.src; } else { lbVid.src = m.src; lbVid.play().catch(()=>{}); }
+  lbCap.textContent = m.caption;
+}
+function closeLightbox(){ lb.classList.remove("open"); lbVid.pause(); }
+lb.addEventListener("click", e => { if (e.target === lb) closeLightbox(); });
+addEventListener("keydown", e => e.key === "Escape" && closeLightbox());
+
+// Typewriter letter
+const letterEl = document.getElementById("letter");
+function typeLetter(){
+  if (reduced) { letterEl.textContent = CONFIG.letter; return; }
+  let i = 0;
+  (function tick(){ letterEl.textContent = CONFIG.letter.slice(0, ++i);
+    if (i < CONFIG.letter.length) setTimeout(tick, 20); })();
+}
+
+// Scroll reveals with parallax
+const io = new IntersectionObserver(entries => entries.forEach(en => {
+  if (en.isIntersecting) {
+    en.target.classList.add("visible");
+    if (en.target.id === "letter-section") typeLetter();
+    io.unobserve(en.target);
+  }
+}), { threshold: .2 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+// Parallax effect
+window.addEventListener("scroll", () => {
+  const scrolled = window.scrollY;
+  document.querySelectorAll(".orb").forEach((orb, i) => {
+    orb.style.transform = `translateY(${scrolled * (0.3 + i * 0.1)}px)`;
+  });
+});
+
+document.getElementById("beginBtn").addEventListener("click", () =>
+  document.getElementById("gallery-section").scrollIntoView({ behavior: "smooth" }));
+
+// Proposal — the "No" button dodges
+const noBtn = document.getElementById("noBtn"), yesBtn = document.getElementById("yesBtn"),
+      box = document.getElementById("proposalBox"), afterYes = document.getElementById("afterYes");
+const noTexts = ["No","Are you sure?","Really sure?","Think again 🥺","Last chance!","Okay, fine — Yes 💍"];
+let dodges = 0;
+function dodge(){
+  dodges++;
+  noBtn.textContent = noTexts[Math.min(dodges, noTexts.length - 1)];
+  if (dodges >= noTexts.length) { sayYes(); return; }
+  const maxX = Math.max(box.clientWidth - noBtn.offsetWidth - 15, 0);
+  const maxY = Math.max(box.clientHeight - noBtn.offsetHeight - 15, 0);
+  noBtn.style.left = Math.random() * maxX + "px";
+  noBtn.style.top  = Math.random() * maxY + "px";
+}
+["pointerenter","click","focus","touchstart"].forEach(ev =>
+  noBtn.addEventListener(ev, e => { e.preventDefault(); dodge(); }));
+
+function sayYes(){
+  yesBtn.style.display = noBtn.style.display = "none";
+  afterYes.style.display = "block";
+  if (!reduced) confettiBurst();
+}
+yesBtn.addEventListener("click", sayYes);
+
+function confettiBurst(){
+  const glyphs = ["💛","✨","💍","❤️","🌟","💚"];
+  for (let i = 0; i < 100; i++){
+    const s = document.createElement("span");
+    s.className = "confetti";
+    s.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDuration = 2.8 + Math.random() * 2.8 + "s";
+    s.style.animationDelay = Math.random() * 1.4 + "s";
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 7000);
+  }
+}
+
+// Floating hearts canvas
+const canvas = document.getElementById("hearts"), ctx = canvas.getContext("2d");
+let heart_list = [];
+function sizeCanvas(){
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  heart_list = Array.from({ length: Math.min(40, innerWidth / 35) }, () => spawn(true));
+}
+function spawn(anywhere){
+  return { x: Math.random() * canvas.width, y: anywhere ? Math.random() * canvas.height : canvas.height + 20,
+    s: 9 + Math.random() * 20, v: .18 + Math.random() * .5, sway: Math.random() * Math.PI * 2,
+    a: .07 + Math.random() * .22,
+    c: ["#E9B949","#00D9A3","#4FFFCC","#F7D9B8","#D98C73"][Math.floor(Math.random() * 5)] };
+}
+function draw(t){
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  heart_list.forEach(h => {
+    h.y -= h.v; h.sway += .014;
+    const x = h.x + Math.sin(h.sway) * 25;
+    if (h.y < -30) Object.assign(h, spawn(false));
+    ctx.globalAlpha = h.a; ctx.fillStyle = h.c;
+    ctx.font = h.s + "px serif"; ctx.fillText("♥", x, h.y);
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(draw);
+}
+sizeCanvas(); addEventListener("resize", sizeCanvas);
+if (!reduced) requestAnimationFrame(draw);
+</script>
+</body>
+</html>
